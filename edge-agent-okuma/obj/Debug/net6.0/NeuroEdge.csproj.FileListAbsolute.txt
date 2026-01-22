@@ -4,3 +4,16 @@
 /Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.AssemblyInfo.cs
 /Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.csproj.CoreCompileInputs.cache
 /Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.sourcelink.json
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/bin/Debug/net6.0/NeuroEdge
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/bin/Debug/net6.0/NeuroEdge.deps.json
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/bin/Debug/net6.0/NeuroEdge.runtimeconfig.json
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/bin/Debug/net6.0/NeuroEdge.dll
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/bin/Debug/net6.0/NeuroEdge.pdb
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/bin/Debug/net6.0/MQTTnet.dll
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/bin/Debug/net6.0/Newtonsoft.Json.dll
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.csproj.Up2Date
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.dll
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/refint/NeuroEdge.dll
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.pdb
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.genruntimeconfig.cache
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/ref/NeuroEdge.dll
