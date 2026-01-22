@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # 1. Broker MQTT (Comunicação Rápida Edge <-> Server)
+  mosquitto:
+    image: eclipse-mosquitto
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+
+  # 2. Banco de Dados (Time-Series + Relacional)
+  timescaledb:
+    image: timescale/timescaledb:latest-pg14
+    environment:
+      - POSTGRES_PASSWORD=neurocnc_secret
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=neurocnc
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # 3. Backend IA (O Cérebro)
+  backend-brain:
+    build: ../backend-brain
+    volumes:
+      - ../backend-brain/src:/app/src
+    environment:
+      - DB_HOST=timescaledb
+      - MQTT_HOST=mosquitto
+    depends_on:
+      - timescaledb
+      - mosquitto
+    ports:
+      - "8000:8000"
+
+  # 4. Dashboard (Interface Visual)
+  dashboard:
+    build: ../dashboard
+    volumes:
+      - ../dashboard:/app
+    environment:
+      - API_URL=http://backend-brain:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend-brain
+
+volumes:
+  postgres_data:

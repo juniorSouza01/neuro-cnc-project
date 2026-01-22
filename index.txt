@@ -1,0 +1,32 @@
+/neuro-cnc-project
+│
+├── /infrastructure
+│   ├── docker-compose.yml          # O orquestrador
+│   ├── /mosquitto
+│   │   └── mosquitto.conf          # Config do Broker
+│   └── /database
+│       └── init.sql                # Criação das tabelas
+│
+├── /edge-agent-okuma               # C# (Visual Studio Solution)
+│   ├── NeuroEdge.sln
+│   └── /src
+│       ├── Program.cs
+│       ├── ThincInterface.cs       # Comunicação com a Máquina
+│       ├── MqttService.cs          # Comunicação com Servidor
+│       └── SafetyGuard.cs          # Proteção contra erros da IA
+│
+├── /backend-brain                  # Python (IA + API)
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── /src
+│   │   ├── main.py                 # API FastAPI
+│   │   ├── config.py
+│   │   ├── /database               # Conexão DB
+│   │   └── /ai_core
+│   │       ├── model_50layers.py   # A Rede Neural Profunda
+│   │       └── inference.py
+│
+└── /dashboard                      # Interface Web
+    ├── Dockerfile
+    ├── requirements.txt
+    └── app.py

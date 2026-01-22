@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+psycopg2-binary
+paho-mqtt
+torch
+numpy
+pandas
+scikit-learn
