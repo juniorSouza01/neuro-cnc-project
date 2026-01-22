@@ -2,6 +2,23 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from src.config import Config
 
+
+def save_action(part_id, suggested_val):
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+        query = """
+            INSERT INTO ai_actions (run_id, suggested_offset_vc, confidence_score)
+            VALUES (%s, %s, 0.95) RETURNING id
+        """
+        run_id = abs(hash(part_id)) % 10000 
+        cur.execute(query, (run_id, suggested_val))
+        id = cur.fetchone()[0]
+        conn.commit()
+        return id
+    finally:
+        conn.close()
+        
 def get_connection():
     conn = psycopg2.connect(
         host=Config.DB_HOST,

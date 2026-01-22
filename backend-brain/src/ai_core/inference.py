@@ -1,44 +1,51 @@
 import torch
 import numpy as np
-from src.ai_core.model_50layers import NeuroCNCModel # Importa a classe que criamos antes
+from src.ai_core.model import NeuroCNCModel
 from src.config import Config
 import os
 
 class InferenceEngine:
     def __init__(self):
-        self.model = NeuroCNCModel()
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.model = NeuroCNCModel(num_sensors=2, static_features=3)
+        self.device = torch.device("cpu") # Força CPU para evitar erro de driver no docker sem GPU
         
-        # Carregar pesos se existirem
         if os.path.exists(Config.MODEL_PATH):
-            self.model.load_state_dict(torch.load(Config.MODEL_PATH, map_location=self.device))
-            print("Pesos do modelo carregados com sucesso.")
+            try:
+                self.model.load_state_dict(torch.load(Config.MODEL_PATH, map_location=self.device))
+                print("Pesos carregados.")
+            except:
+                print("Erro ao carregar pesos. Usando aleatórios.")
         else:
-            print("AVISO: Usando modelo não treinado (pesos aleatórios).")
+            print("Arquivo de pesos não encontrado. Usando aleatórios.")
         
         self.model.to(self.device)
         self.model.eval()
 
     def predict_adjustment(self, telemetry_data, static_data):
-        """
-        telemetry_data: Lista de dicts dos últimos sensores
-        static_data: Lista [MaterialID, ToolID, TargetDim]
-        """
-        # 1. Preprocessamento: Converter lista para Tensor [Batch, Channel, Time]
-        # Simplificação: Pegando apenas SpindleLoad e Temp
-        loads = [x['spindle_load'] for x in telemetry_data]
-        temps = [x['spindle_temp'] for x in telemetry_data]
+        if not telemetry_data:
+            print("Sem telemetria recente. Retornando 0.")
+            return 0.0
+
+        # Extração de features
+        loads = [d['spindle_load'] for d in telemetry_data]
+        temps = [d['spindle_temp'] for d in telemetry_data]
         
-        # Padding se faltar dados (garantir tamanho fixo)
-        # Assumindo janela de 100 pontos
-        tensor_input = torch.tensor([loads, temps], dtype=torch.float32).unsqueeze(0) 
+        # Garante tamanho fixo (Padding ou Truncate) - Janela de 100
+        target_len = 100
+        current_len = len(loads)
+        
+        if current_len < target_len:
+            loads += [0] * (target_len - current_len)
+            temps += [0] * (target_len - current_len)
+        else:
+            loads = loads[:target_len]
+            temps = temps[:target_len]
+
+        # Monta Tensor: [Batch=1, Channels=2, Time=100]
+        tensor_input = torch.tensor([loads, temps], dtype=torch.float32).unsqueeze(0)
         tensor_static = torch.tensor([static_data], dtype=torch.float32)
 
-        # 2. Inferência
         with torch.no_grad():
-            tensor_input = tensor_input.to(self.device)
-            tensor_static = tensor_static.to(self.device)
-            
             prediction = self.model(tensor_input, tensor_static)
             
-        return prediction.item() # Retorna float (mm)
+        return prediction.item()

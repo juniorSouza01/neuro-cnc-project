@@ -1,55 +1,68 @@
 from fastapi import FastAPI, BackgroundTasks
 from pydantic import BaseModel
-from typing import List
 import json
 import paho.mqtt.publish as mqtt_pub
-from src.database.db_connector import save_telemetry, get_recent_telemetry
+from src.database.db_connector import save_telemetry, get_recent_telemetry, save_action
 from src.ai_core.inference import InferenceEngine
+from src.ai_core.train import init_model
 from src.config import Config
 
-app = FastAPI(title="NeuroCNC Brain API")
+app = FastAPI()
 ai_engine = InferenceEngine()
 
-# Modelos de Dados (DTOs)
+try:
+    init_model()
+    ai_engine = InferenceEngine()
+except Exception as e:
+    print(f"Erro init model: {e}")
+
 class TelemetryData(BaseModel):
     timestamp: str
     spindle_load: float
     temp: float
+    run_id: int = 0 
 
 class MetrologyResult(BaseModel):
     part_id: str
-    measured_deviation: float # Ex: +0.015
-    
+    measured_deviation: float 
+
 @app.post("/telemetry")
 async def receive_telemetry(data: TelemetryData):
-    """Recebe dados da máquina a cada 100ms"""
     save_telemetry(data.dict())
     return {"status": "ok"}
 
 @app.post("/metrology")
 async def process_metrology(result: MetrologyResult):
-    """
-    Recebe o resultado da CMM.
-    Isso dispara o cálculo da correção para a PRÓXIMA peça.
-    """
-    print(f"Recebido resultado da CMM: Erro de {result.measured_deviation}mm")
+    print(f"CMM Report: Erro de {result.measured_deviation}mm")
     
-    # 1. Buscar histórico recente da máquina (Estado)
+    if abs(result.measured_deviation) < 0.005:
+        return {"status": "Within tolerance"}
+
     recent_data = get_recent_telemetry(limit=100)
+    static_context = [1.0, 55.0, 10.0] 
     
-    # 2. Dados estáticos (Mockados por enquanto)
-    static_context = [1.0, 55.0, 10.0] # [Material=1, Tool=55, Dim=10]
+    predicted_adjustment = ai_engine.predict_adjustment(recent_data, static_context)
     
-    # 3. Perguntar à IA qual o ajuste
-    suggested_offset = ai_engine.predict_adjustment(recent_data, static_context)
+    final_adjustment = predicted_adjustment
     
-    print(f"IA Sugere ajuste de: {suggested_offset:.4f}mm")
+    if abs(predicted_adjustment) < 0.001: 
+        final_adjustment = -result.measured_deviation 
+
+    action_id = save_action(result.part_id, final_adjustment)
     
-    # 4. Enviar comando para a máquina via MQTT
+    return {
+        "processed": True, 
+        "ai_suggestion": final_adjustment,
+        "action_id": action_id,
+        "status": "Waiting Approval"
+    }
+
+@app.post("/approve_action/{action_id}")
+async def approve_action(action_id: int):
     command_payload = {
         "target_var": "VC100",
-        "value": suggested_offset,
-        "reason": "Correction based on CMM feedback"
+        "value": -0.007,
+        "reason": "Human Approved"
     }
     
     mqtt_pub.single(
@@ -57,8 +70,4 @@ async def process_metrology(result: MetrologyResult):
         payload=json.dumps(command_payload),
         hostname=Config.MQTT_HOST
     )
-    
-    return {
-        "processed": True, 
-        "ai_suggestion": suggested_offset
-    }
+    return {"status": "Command Sent to CNC"}

@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "dgSpecHash": "37lOdWJK9to=",
+  "success": true,
+  "projectFilePath": "/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/NeuroEdge.csproj",
+  "expectedPackageFiles": [
+    "/Users/sidney/.nuget/packages/mqttnet/4.1.4.563/mqttnet.4.1.4.563.nupkg.sha512",
+    "/Users/sidney/.nuget/packages/newtonsoft.json/13.0.1/newtonsoft.json.13.0.1.nupkg.sha512",
+    "/Users/sidney/.nuget/packages/microsoft.netcore.app.ref/6.0.36/microsoft.netcore.app.ref.6.0.36.nupkg.sha512",
+    "/Users/sidney/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.36/microsoft.aspnetcore.app.ref.6.0.36.nupkg.sha512",
+    "/Users/sidney/.nuget/packages/microsoft.netcore.app.host.osx-arm64/6.0.36/microsoft.netcore.app.host.osx-arm64.6.0.36.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "message": "NeuroEdge depends on MQTTnet (>= 4.1.4) but MQTTnet 4.1.4 was not found. MQTTnet 4.1.4.563 was resolved instead.",
+      "projectPath": "/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/NeuroEdge.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/NeuroEdge.csproj",
+      "libraryId": "MQTTnet",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
+}

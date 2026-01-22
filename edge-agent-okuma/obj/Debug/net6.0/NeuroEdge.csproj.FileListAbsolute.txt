@@ -1,0 +1,6 @@
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.csproj.AssemblyReference.cache
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.AssemblyInfoInputs.cache
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.AssemblyInfo.cs
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.csproj.CoreCompileInputs.cache
+/Users/sidney/Desktop/Gelado - Repo's/neuro-cnc-project/edge-agent-okuma/obj/Debug/net6.0/NeuroEdge.sourcelink.json
