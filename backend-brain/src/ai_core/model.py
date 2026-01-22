@@ -29,7 +29,7 @@ class NeuroCNCModel(nn.Module):
         self.bn_initial = nn.BatchNorm1d(64)
         self.relu = nn.ReLU()
         
-        # Reduzido para 4 blocos para ser mais leve no MVP (pode aumentar depois)
+        # Reduzido para 4 blocos para ser mais leve no MVP
         self.res_blocks = nn.Sequential(*[ResidualBlock(64) for _ in range(4)])
         
         self.global_pool = nn.AdaptiveAvgPool1d(1)
